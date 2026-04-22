@@ -1,0 +1,4 @@
+"venv/" 
+"__pycache__/" 
+"*.db"    # Opcional, si no quieres subir la base de datos
+".env" 
