@@ -1,22 +1,28 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="d-flex justify-content-between mb-3">
-    <h2>Listado de Citas</h2>
+    <h2>Citas Programadas</h2>
 </div>
 
-<table class="table table-bordered">
-    <thead>
-        <tr><th>Mascota</th><th>Propietario</th><th>Especie</th><th>Fecha</th></tr>
-    </thead>
-    <tbody>
-        {% for cita in citas %}
-        <tr>
-            <td>{{ cita.mascota }}</td>
-            <td>{{ cita.propietario }}</td>
-            <td>{{ cita.especie }}</td>
-            <td>{{ cita.fecha }}</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+<div class="row">
+    {% for cita in citas %}
+    <div class="col-md-4 mb-3">
+        <div class="card h-100 shadow-sm 
+            {% if cita.especie == 'Perro' %}border-primary
+            {% elif cita.especie == 'Gato' %}border-warning
+            {% elif cita.especie == 'Ave' %}border-success
+            {% else %}border-secondary{% endif %}"
+            style="border-width: 3px;">
+            <div class="card-body">
+                <h5 class="card-title">{{ cita.mascota }}</h5>
+                <p class="card-text">
+                    <strong>Dueño:</strong> {{ cita.propietario }}<br>
+                    <strong>Especie:</strong> {{ cita.especie or 'No especificada' }}<br>
+                    <strong>Fecha:</strong> {{ cita.fecha }}
+                </p>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
 {% endblock %}
