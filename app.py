@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request, redirect, url_for
 import sqlite3
 
 app = Flask(__name__)
@@ -30,8 +30,6 @@ def init_db():
         for m,p,e,f in ejemplo:
             conn.execute('INSERT INTO pacientes (mascota, propietario, especie, fecha) VALUES (?,?,?,?)',
                          (m,p,e,f))
-    
-    print("Base de datos inicializada con datos de ejemplo")
 
 @app.route('/')
 def index():
@@ -39,6 +37,42 @@ def index():
     citas = conn.execute('SELECT * FROM pacientes ORDER BY fecha').fetchall()
     conn.close()
     return render_template('index.html', citas=citas)
+
+@app.route('/agendar', methods=['GET', 'POST'])
+def agendar():
+    if request.method == 'POST':
+        mascota = request.form['mascota']
+        propietario = request.form['propietario']
+        especie = request.form['especie']
+        fecha = request.form['fecha']
+        with get_db() as conn:
+            conn.execute('INSERT INTO pacientes (mascota, propietario, especie, fecha) VALUES (?, ?, ?, ?)',
+                         (mascota, propietario, especie, fecha))
+        return redirect(url_for('index'))
+    return render_template('agendar.html')
+
+@app.route('/modificar/<int:id>', methods=['GET', 'POST'])
+def modificar(id):
+    conn = get_db()
+    if request.method == 'POST':
+        mascota = request.form['mascota']
+        propietario = request.form['propietario']
+        especie = request.form['especie']
+        fecha = request.form['fecha']
+        conn.execute('UPDATE pacientes SET mascota=?, propietario=?, especie=?, fecha=? WHERE id=?',
+                     (mascota, propietario, especie, fecha, id))
+        conn.commit()
+        conn.close()
+        return redirect(url_for('index'))
+    cita = conn.execute('SELECT * FROM pacientes WHERE id = ?', (id,)).fetchone()
+    conn.close()
+    return render_template('modificar.html', cita=cita)
+
+@app.route('/cancelar/<int:id>')
+def cancelar(id):
+    with get_db() as conn:
+        conn.execute('DELETE FROM pacientes WHERE id = ?', (id,))
+    return redirect(url_for('index'))
 
 if __name__ == '__main__':
     init_db()

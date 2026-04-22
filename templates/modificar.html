@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Modificar cita de {{ cita.mascota }}</h2>
+<form method="post">
+    <div class="mb-3">
+        <label>Mascota</label>
+        <input type="text" name="mascota" value="{{ cita.mascota }}" class="form-control" required>
+    </div>
+    <div class="mb-3">
+        <label>Propietario</label>
+        <input type="text" name="propietario" value="{{ cita.propietario }}" class="form-control" required>
+    </div>
+    <div class="mb-3">
+        <label>Especie</label>
+        <select name="especie" class="form-select">
+            <option value="{{ cita.especie }}" selected>{{ cita.especie or 'Seleccionar' }}</option>
+            <option>Perro</option>
+            <option>Gato</option>
+            <option>Ave</option>
+            <option>Roedor</option>
+            <option>Reptil</option>
+        </select>
+    </div>
+    <div class="mb-3">
+        <label>Fecha</label>
+        <input type="datetime-local" name="fecha" value="{{ cita.fecha.replace(' ', 'T') }}" class="form-control" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Actualizar</button>
+    <a href="{{ url_for('index') }}" class="btn btn-secondary">Volver</a>
+</form>
+{% endblock %}

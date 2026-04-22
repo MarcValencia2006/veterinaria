@@ -2,6 +2,7 @@
 {% block content %}
 <div class="d-flex justify-content-between mb-3">
     <h2>Citas Programadas</h2>
+    <a href="{{ url_for('agendar') }}" class="btn btn-success">Nueva Cita</a>
 </div>
 
 <div class="row">
@@ -20,6 +21,10 @@
                     <strong>Especie:</strong> {{ cita.especie or 'No especificada' }}<br>
                     <strong>Fecha:</strong> {{ cita.fecha }}
                 </p>
+                <div class="d-flex justify-content-between">
+                    <a href="{{ url_for('modificar', id=cita.id) }}" class="btn btn-sm btn-primary">Editar</a>
+                    <a href="{{ url_for('cancelar', id=cita.id) }}" class="btn btn-sm btn-danger" onclick="return confirm('Cancelar esta cita?')">Cancelar</a>
+                </div>
             </div>
         </div>
     </div>
