@@ -21,11 +21,24 @@ def init_db():
                 fecha TEXT NOT NULL
             )
         ''')
-    print("Base de datos inicializada")
+        
+        ejemplo = [
+            ("Luna", "Marcos Valencia", "Perro", "2025-04-25 10:00"),
+            ("Misi", "Fernando Tonconi", "Gato", "2025-04-26 14:30"),
+            ("Piolin", "Ana Valencia", "Ave", "2025-04-27 09:15")
+        ]
+        for m,p,e,f in ejemplo:
+            conn.execute('INSERT INTO pacientes (mascota, propietario, especie, fecha) VALUES (?,?,?,?)',
+                         (m,p,e,f))
+    
+    print("Base de datos inicializada con datos de ejemplo")
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    conn = get_db()
+    citas = conn.execute('SELECT * FROM pacientes ORDER BY fecha').fetchall()
+    conn.close()
+    return render_template('index.html', citas=citas)
 
 if __name__ == '__main__':
     init_db()

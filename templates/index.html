@@ -1,5 +1,22 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>Bienvenido al sistema</h2>
-<p>Sistema en citas</p>
+<div class="d-flex justify-content-between mb-3">
+    <h2>Listado de Citas</h2>
+</div>
+
+<table class="table table-bordered">
+    <thead>
+        <tr><th>Mascota</th><th>Propietario</th><th>Especie</th><th>Fecha</th></tr>
+    </thead>
+    <tbody>
+        {% for cita in citas %}
+        <tr>
+            <td>{{ cita.mascota }}</td>
+            <td>{{ cita.propietario }}</td>
+            <td>{{ cita.especie }}</td>
+            <td>{{ cita.fecha }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
 {% endblock %}
